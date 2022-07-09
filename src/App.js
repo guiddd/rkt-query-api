@@ -1,18 +1,22 @@
 import './App.css';
-import Poke from './components/Poke';
-import { useGetPokeQuery } from './services/pokeApi';
+import Form from './components/Form';
+import { useGetUsersQuery } from './services/pokeApi';
 
 function App() {
 
-  const { data, error, isLoading, isSuccess, isError } = useGetPokeQuery();
+  const { data, error, isLoading, isSuccess, isError } = useGetUsersQuery();
 
   return (
     <div className="App">
-      <Poke/>
+      <h1>Get users firestore</h1>
       <hr/>
       {isLoading && "Loading..."}
       {isError && error.message}
-      {data ? data.map((user, i) => <h4 key={i}>{user.name}</h4>) : 'missing data'}
+      {data ? data.map(item=>(
+                <p key={item.id}>El nombre del usuario es <b>{item.name}</b>, tiene <b>{item.age}</b> años y se encarga de <b>{item.job}</b></p>)) 
+                : 'missing data'}
+      <hr/>
+      <Form/>
     </div>
   );
 }
