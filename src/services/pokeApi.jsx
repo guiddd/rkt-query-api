@@ -1,5 +1,5 @@
 import {createApi, fakeBaseQuery} from '@reduxjs/toolkit/query/react'
-import { getDocs, collection } from 'firebase/firestore';
+import { getDocs, collection, addDoc } from 'firebase/firestore';
 import db from '../firebase';
 
 export const pokeApi = createApi({
@@ -17,7 +17,6 @@ export const pokeApi = createApi({
                         ...doc.data(),
                     })
                 }) /*en comparacion a la práctica original (sin rtk query), modifique el fetch para no manjear datos undefined que marcarian error*/
-                console.log(users)
                 return {data:users}
 
             }catch(err){
@@ -25,7 +24,17 @@ export const pokeApi = createApi({
             }
         }
       }),
+      addUser:builder.mutation({
+        async queryFn(user){
+            try{
+                await addDoc(collection(db,"usuarios"),user)
+                console.log('User added')
+            }catch(err){
+                console.log(err.message)
+            }
+        }
+      })
     }),
   });
   
-  export const { useGetUsersQuery } = pokeApi;
+  export const { useGetUsersQuery, useAddUserMutation } = pokeApi;
