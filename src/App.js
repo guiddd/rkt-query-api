@@ -1,23 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import Poke from './components/Poke';
+import { useGetPokeQuery } from './services/pokeApi';
 
 function App() {
+
+  const { data, error, isLoading, isSuccess, isError } = useGetPokeQuery();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Poke/>
+      <hr/>
+      {isLoading && "Loading..."}
+      {isError && error.message}
+      {data ? data.map((user, i) => <h4 key={i}>{user.name}</h4>) : 'missing data'}
     </div>
   );
 }
